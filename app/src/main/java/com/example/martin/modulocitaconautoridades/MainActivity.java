@@ -1,7 +1,6 @@
 package com.example.martin.modulocitaconautoridades;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,12 +10,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.loopj.android.http.*;
-
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestHandle;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
                                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                                         //SIEMPRE REVISAR LOS CASTEOS DE VARIABLES , PARA EVITAR ERRORES...
-
+ 
                                         String codigocad = String.valueOf(codigo1.get(position));
 
                                         int codigo = Integer.parseInt(codigocad);
