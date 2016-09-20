@@ -206,7 +206,7 @@ public class MainActivity extends Activity {
 
                                 @Override
                                 public void onNothingSelected(AdapterView<?> parent) {
-                                    Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "XXXXXXXXX", Toast.LENGTH_LONG).show();
                                 }
                             });
 
