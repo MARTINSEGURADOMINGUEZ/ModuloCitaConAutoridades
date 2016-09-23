@@ -29,6 +29,10 @@ public class MainActivity extends Activity {
     private EditText edt1;
     private Button btn1;
 
+    public int codigoGlobal;
+
+    public int codigoAutoridadGlonal;
+
     private ArrayList codigo1  = new ArrayList();
     private ArrayList nombre1 = new ArrayList();
 
@@ -51,6 +55,8 @@ public class MainActivity extends Activity {
         spn3 = (Spinner) findViewById(R.id.spinner3);
         spn4 = (Spinner) findViewById(R.id.spinner4);
 
+        edt1 = (EditText) findViewById(R.id.editText);
+
         btn1 = (Button)findViewById(R.id.button);
 
         CargarFacultades();
@@ -59,7 +65,9 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
+                EnviarsSolicitud(codigoGlobal);
 
+                FiltrarDisponibilidad(codigoAutoridadGlonal);
 
             }
         });
@@ -206,7 +214,7 @@ public class MainActivity extends Activity {
 
                                 @Override
                                 public void onNothingSelected(AdapterView<?> parent) {
-                                    Toast.makeText(getApplicationContext(), "XXXXXXXXXIIIIIIII", Toast.LENGTH_LONG).show();
+
                                 }
                             });
 
@@ -256,6 +264,7 @@ public class MainActivity extends Activity {
 
                     }
 
+
                     spn3.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, nombre3));
                     spn3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
@@ -271,14 +280,28 @@ public class MainActivity extends Activity {
 
                                     FiltrarDisponibilidad(codigo);
 
+                                    codigoAutoridadGlonal = codigo;
+
                                     break;}
                                 case 1:{
+
+                                    FiltrarDisponibilidad(codigo);
+
+                                    codigoAutoridadGlonal = codigo;
 
                                     break;}
                                 case 2:{
 
+                                    FiltrarDisponibilidad(codigo);
+
+                                    codigoAutoridadGlonal = codigo;
+
                                     break;}
                                 case 3:{
+
+                                    FiltrarDisponibilidad(codigo);
+
+                                    codigoAutoridadGlonal = codigo;
 
                                     break;}
 
@@ -312,8 +335,8 @@ public class MainActivity extends Activity {
 
     public void FiltrarDisponibilidad(int codigoAutoridad){
 
-        nombre3.clear();
-        codigo3.clear();
+        nombre4.clear();
+        codigo4.clear();
 
         String codigoautori = String.valueOf(codigoAutoridad);
 
@@ -341,6 +364,7 @@ public class MainActivity extends Activity {
 
                     spn4.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, nombre4));
                     spn4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -348,23 +372,27 @@ public class MainActivity extends Activity {
 
                             int codigo = Integer.parseInt(codigocad);
 
-                            switch (position){
+                            switch (position) {
 
-                                case 0:{
+                                case 0: {
 
-                                    FiltrarDisponibilidad(codigo);
+                                    codigoGlobal = codigo;
 
-                                    break;}
-                                case 1:{
+                                    break;
+                                }
+                                case 1: {
 
-                                    break;}
-                                case 2:{
+                                    codigoGlobal = codigo;
 
-                                    break;}
-                                case 3:{
 
-                                    break;}
+                                    break;
+                                }
+                                case 2: {
 
+                                    codigoGlobal = codigo;
+
+                                    break;
+                                }
                             }
                         }
 
@@ -388,4 +416,48 @@ public class MainActivity extends Activity {
         });
 
     }
+
+    public void EnviarsSolicitud(int codigoDisponibilidad) {
+
+        String codigodispo = String.valueOf(codigoDisponibilidad);
+
+
+        String mensaje = edt1.getText().toString();
+
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        String url = "http://examenfinal2016.esy.es/ModuloCafeteriaSimple/ModuloAutoridadesPart5.php";
+
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("codigodisponi", codigodispo);
+        requestParams.add("mensajeasunto", mensaje);
+
+        RequestHandle post = client.post(url, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                if (statusCode == 200) {
+
+                    Toast.makeText(getApplicationContext(), "SU SOLICITUD FUE ENVIADA", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "OCURRIO UN ERROR , EMPIEZE DENUEVO", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                Toast.makeText(getApplicationContext(), "OCURRIO UN ERROR , EMPIEZE DENUEVO", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+
 }
