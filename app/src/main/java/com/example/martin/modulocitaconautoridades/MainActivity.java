@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
 
     public int codigoGlobal;
 
-    public int codigoAutoridadGlonal;
+    public int codigoReload;
 
     private ArrayList codigo1  = new ArrayList();
     private ArrayList nombre1 = new ArrayList();
@@ -65,9 +65,22 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                EnviarsSolicitud(codigoGlobal);
+                if (codigoGlobal >= 0) {
 
-                FiltrarDisponibilidad(codigoAutoridadGlonal);
+                    EnviarsSolicitud(codigoGlobal);
+
+                    CargarFacultades();
+
+
+                    edt1.setText("");
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "NO PODEMOS HACER LO QUE PIDES", Toast.LENGTH_SHORT).show();
+
+                }
+
+
 
             }
         });
@@ -114,15 +127,23 @@ public class MainActivity extends Activity {
 
                                             case 0:{
                                                     FiltrarCarrera(codigo);
+
+
                                                 break;}
                                             case 1:{
                                                 FiltrarCarrera(codigo);
+
+
                                                 break;}
                                             case 2:{
                                                 FiltrarCarrera(codigo);
+
+
                                                 break;}
                                             case 3:{
                                                 FiltrarCarrera(codigo);
+
+
                                                 break;}
 
                                         }
@@ -145,7 +166,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-                        Toast.makeText(getApplicationContext()," SUPER ERRORR!!!",Toast.LENGTH_LONG).show();
+
 
                     }
                 });
@@ -280,28 +301,24 @@ public class MainActivity extends Activity {
 
                                     FiltrarDisponibilidad(codigo);
 
-                                    codigoAutoridadGlonal = codigo;
 
                                     break;}
                                 case 1:{
 
                                     FiltrarDisponibilidad(codigo);
 
-                                    codigoAutoridadGlonal = codigo;
 
                                     break;}
                                 case 2:{
 
                                     FiltrarDisponibilidad(codigo);
 
-                                    codigoAutoridadGlonal = codigo;
 
                                     break;}
                                 case 3:{
 
                                     FiltrarDisponibilidad(codigo);
 
-                                    codigoAutoridadGlonal = codigo;
 
                                     break;}
 
@@ -362,6 +379,12 @@ public class MainActivity extends Activity {
 
                     }
 
+                    if (codigo4.isEmpty()) {
+
+                        codigoGlobal = -1;
+
+                    }
+
                     spn4.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, nombre4));
                     spn4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -371,6 +394,7 @@ public class MainActivity extends Activity {
                             String codigocad = String.valueOf(codigo4.get(position));
 
                             int codigo = Integer.parseInt(codigocad);
+
 
                             switch (position) {
 
@@ -399,6 +423,8 @@ public class MainActivity extends Activity {
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
 
+                            codigoGlobal = -1;
+
                         }
                     });
 
@@ -415,6 +441,7 @@ public class MainActivity extends Activity {
             }
         });
 
+
     }
 
     public void EnviarsSolicitud(int codigoDisponibilidad) {
@@ -424,39 +451,46 @@ public class MainActivity extends Activity {
 
         String mensaje = edt1.getText().toString();
 
+        if (mensaje.equals("")) {
 
-        AsyncHttpClient client = new AsyncHttpClient();
+            edt1.setError("LLENAR CAMPO OBLIGATORIO!!!");
 
-        String url = "http://examenfinal2016.esy.es/ModuloCafeteriaSimple/ModuloAutoridadesPart5.php";
+        } else {
 
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("codigodisponi", codigodispo);
-        requestParams.add("mensajeasunto", mensaje);
 
-        RequestHandle post = client.post(url, requestParams, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            AsyncHttpClient client = new AsyncHttpClient();
 
-                if (statusCode == 200) {
+            String url = "http://examenfinal2016.esy.es/ModuloCafeteriaSimple/ModuloAutoridadesPart5.php";
 
-                    Toast.makeText(getApplicationContext(), "SU SOLICITUD FUE ENVIADA", Toast.LENGTH_SHORT).show();
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("codigodisponi", codigodispo);
+            requestParams.add("mensajeasunto", mensaje);
 
-                } else {
+            RequestHandle post = client.post(url, requestParams, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                    if (statusCode == 200) {
+
+                        Toast.makeText(getApplicationContext(), "SU SOLICITUD FUE ENVIADA", Toast.LENGTH_SHORT).show();
+
+                    } else {
+
+                        Toast.makeText(getApplicationContext(), "OCURRIO UN ERROR , EMPIEZE DENUEVO", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
                     Toast.makeText(getApplicationContext(), "OCURRIO UN ERROR , EMPIEZE DENUEVO", Toast.LENGTH_SHORT).show();
 
                 }
+            });
 
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                Toast.makeText(getApplicationContext(), "OCURRIO UN ERROR , EMPIEZE DENUEVO", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
+        }
     }
 
 
